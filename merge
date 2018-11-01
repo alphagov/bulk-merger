@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source .env
+export GEM_NAME=$1
+bundle exec rake merge
