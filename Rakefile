@@ -18,3 +18,8 @@ task :merge do
   BulkMerger.approve_unreviewed_pull_requests!
   BulkMerger.merge_approved_pull_requests!
 end
+
+desc "Merge approved pull requests, without reviewing"
+task :merge_only do
+  BulkMerger.merge_approved_pull_requests!
+end
