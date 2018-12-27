@@ -12,7 +12,7 @@ GEM
     multipart-post (2.0.0)
     octokit (4.8.0)
       sawyer (~> 0.8.0, >= 0.5.3)
-    public_suffix (3.0.2)
+    public_suffix (3.0.3)
     rake (12.3.2)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
@@ -31,7 +31,7 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
-    webmock (3.4.2)
+    webmock (3.5.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
