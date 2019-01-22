@@ -4,7 +4,8 @@ Bulk merge Pull Requests from Dependabot.
 
 ## Setup
 
-Add your token with repo access to `.env`:
+Create a "Personal access token", with at least the `repo/public_repo`
+scope. Add your token with repo access to `.env`:
 
 ```
 export GITHUB_TOKEN=<yourtoken>
