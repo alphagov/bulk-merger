@@ -72,7 +72,7 @@ class BulkMerger
   end
 
   def self.search_pull_requests(query)
-    client.search_issues("#{gem_name} archived:false is:pr user:alphagov state:open author:app/dependabot in:title #{query}").items
+    client.search_issues("#{gem_name} archived:false is:pr user:alphagov state:open author:app/dependabot-preview in:title #{query}").items
   end
 
   def self.client
