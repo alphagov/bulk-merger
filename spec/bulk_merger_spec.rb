@@ -18,7 +18,7 @@ RSpec.describe BulkMerger do
         ]
       }
 
-      stub_request(:get, "https://api.github.com/search/issues?per_page=100&q=funky-gem-to-merge%20archived:false%20is:pr%20user:alphagov%20state:open%20author:app/dependabot%20in:title%20review:none%20funky-gem-to-merge").
+      stub_request(:get, "https://api.github.com/search/issues?per_page=100&q=funky-gem-to-merge%20archived:false%20is:pr%20user:alphagov%20state:open%20author:app/dependabot-preview%20in:title%20review:none%20funky-gem-to-merge").
         to_return(body: JSON.dump(response), headers: { 'Content-Type' => 'application/json' })
 
       ENV["GEM_NAME"] = "funky-gem-to-merge"
@@ -46,7 +46,7 @@ RSpec.describe BulkMerger do
         ]
       }
 
-      stub_request(:get, "https://api.github.com/search/issues?per_page=100&q=funky-gem-to-merge%20archived:false%20is:pr%20user:alphagov%20state:open%20author:app/dependabot%20in:title%20review:approved").
+      stub_request(:get, "https://api.github.com/search/issues?per_page=100&q=funky-gem-to-merge%20archived:false%20is:pr%20user:alphagov%20state:open%20author:app/dependabot-preview%20in:title%20review:approved").
         to_return(body: JSON.dump(response), headers: { 'Content-Type' => 'application/json' })
 
       ENV["GEM_NAME"] = "funky-gem-to-merge"
