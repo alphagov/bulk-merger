@@ -4,7 +4,7 @@ class BulkMerger
   def self.approve_unreviewed_pull_requests!
     puts "Searching for Dependabot PRs for gem '#{gem_name}'"
 
-    unreviewed_pull_requests = search_pull_requests("review:none #{gem_name}")
+    unreviewed_pull_requests = find_govuk_pull_requests("review:none #{gem_name}")
 
     if unreviewed_pull_requests.size == 0
       puts "No unreviewed PRs found!"
@@ -36,7 +36,7 @@ class BulkMerger
   end
 
   def self.merge_approved_pull_requests!
-    unmerged_pull_requests = search_pull_requests("review:approved")
+    unmerged_pull_requests = find_govuk_pull_requests("review:approved")
 
     if unmerged_pull_requests.size == 0
       puts "No unmerged PRs found!"
@@ -73,6 +73,15 @@ class BulkMerger
 
   def self.search_pull_requests(query)
     client.search_issues("#{gem_name} archived:false is:pr user:alphagov state:open author:app/dependabot-preview in:title #{query}").items
+  end
+
+  def self.find_govuk_pull_requests(query)
+    # Only search non-archived repos tagged with `govuk`.
+    repos = client.search_repos("org:alphagov topic:govuk").items.reject!(&:archived)
+
+    search_pull_requests(query).select do |pr|
+      repos.any? { |repo| pr.repository_url.include?(repo.full_name) }
+    end
   end
 
   def self.client
