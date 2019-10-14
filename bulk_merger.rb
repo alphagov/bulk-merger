@@ -72,15 +72,19 @@ class BulkMerger
   end
 
   def self.search_pull_requests(query)
-    client.search_issues("#{gem_name} archived:false is:pr user:alphagov state:open author:app/dependabot-preview status:success in:title #{query}").items
+    client.search_issues("#{gem_name} archived:false is:pr user:alphagov state:open author:app/dependabot-preview in:title #{query}").items
+  end
+
+  def self.govuk_repos
+    @govuk_repos ||= client.search_repos("org:alphagov topic:govuk")
+      .items
+      .reject!(&:archived)
+      .map { |repo| repo.full_name }
   end
 
   def self.find_govuk_pull_requests(query)
-    # Only search non-archived repos tagged with `govuk`.
-    repos = client.search_repos("org:alphagov topic:govuk").items.reject!(&:archived)
-
     search_pull_requests(query).select do |pr|
-      repos.any? { |repo| pr.repository_url.include?(repo.full_name) }
+      govuk_repos.any? { |repo| pr.repository_url.include?(repo) }
     end
   end
 
