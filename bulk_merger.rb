@@ -1,7 +1,7 @@
 require "octokit"
 
 class BulkMerger
-  def self.approve_unreviewed_pull_requests!
+  def self.approve_unreviewed_pull_requests!(list: nil)
     puts "Searching for Dependabot PRs for gem '#{gem_name}'"
 
     unreviewed_pull_requests = find_govuk_pull_requests("review:none #{gem_name}")
@@ -16,6 +16,8 @@ class BulkMerger
     unreviewed_pull_requests.each do |pr|
       puts "- '#{pr.title}' (#{pr.html_url}) "
     end
+
+    return if list
 
     puts "\nHave you reviewed the changes, and you want to approve all these PRs? [y/N]\n"
     if STDIN.gets.chomp == "y"
