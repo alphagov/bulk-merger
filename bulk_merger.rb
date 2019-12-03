@@ -21,7 +21,7 @@ class BulkMerger
 
     puts "\nHave you reviewed the changes, and you want to approve all these PRs? [y/N]\n"
     if STDIN.gets.chomp == "y"
-      puts "OK! Approving away..."
+      puts "OK! 👍 Approving away..."
     else
       puts "👋"
       exit 1
@@ -53,7 +53,7 @@ class BulkMerger
 
     puts "\nHave you reviewed the changes, and you want to MERGE all these PRs? [y/N]\n"
     if STDIN.gets.chomp == "y"
-      puts "OK! Merging away..."
+      puts "OK! 👍 Merging away..."
     else
       puts "👋"
       exit 1
