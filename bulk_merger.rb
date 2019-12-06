@@ -2,9 +2,9 @@ require "octokit"
 
 class BulkMerger
   def self.approve_unreviewed_pull_requests!(list: nil)
-    puts "Searching for Dependabot PRs for gem '#{gem_name}'"
+    puts "Searching for PRs containing '#{query_string}'"
 
-    unreviewed_pull_requests = find_govuk_pull_requests("review:none #{gem_name}")
+    unreviewed_pull_requests = find_govuk_pull_requests("review:none #{query_string}")
 
     if unreviewed_pull_requests.size == 0
       puts "No unreviewed PRs found!"
@@ -38,7 +38,7 @@ class BulkMerger
   end
 
   def self.merge_approved_pull_requests!
-    unmerged_pull_requests = find_govuk_pull_requests("review:approved")
+    unmerged_pull_requests = find_govuk_pull_requests("review:approved #{query_string}")
 
     if unmerged_pull_requests.size == 0
       puts "No unmerged PRs found!"
@@ -74,7 +74,7 @@ class BulkMerger
   end
 
   def self.search_pull_requests(query)
-    client.search_issues("#{gem_name} archived:false is:pr user:alphagov state:open author:app/dependabot author:app/dependabot-preview in:title #{query}").items
+    client.search_issues("#{query} archived:false is:pr user:alphagov state:open in:title").items
   end
 
   def self.govuk_repos
@@ -94,7 +94,7 @@ class BulkMerger
     @client ||= Octokit::Client.new(access_token: ENV.fetch("GITHUB_TOKEN"), auto_paginate: true)
   end
 
-  def self.gem_name
-    ENV.fetch("GEM_NAME")
+  def self.query_string
+    ENV.fetch("QUERY_STRING")
   end
 end
