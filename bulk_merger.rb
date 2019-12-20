@@ -74,11 +74,18 @@ class BulkMerger
   end
 
   def self.search_pull_requests(query)
-    client.search_issues("#{query} archived:false is:pr user:alphagov state:open in:title").items
+    client.search_issues("#{query} archived:false is:pr user:#{user_name} state:open in:title").items
   end
 
   def self.govuk_repos
-    @govuk_repos ||= client.search_repos("org:alphagov topic:govuk")
+
+    search = "org:#{user_name}"
+
+    if topic != "NONE"
+      search += " topic:#{topic}"
+    end
+
+    @govuk_repos ||= client.search_repos(search)
       .items
       .reject!(&:archived)
       .map { |repo| repo.full_name }
@@ -96,5 +103,13 @@ class BulkMerger
 
   def self.query_string
     ENV.fetch("QUERY_STRING")
+  end
+
+  def self.user_name
+    ENV.fetch("GITHUB_USER", "alphagov")
+  end
+
+  def self.topic
+    ENV.fetch("GITHUB_TOPIC", "govuk")
   end
 end
