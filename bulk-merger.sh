@@ -6,4 +6,4 @@ cmd=$(basename "$0")
 [[ -r ".env" ]] && source .env
 
 export QUERY_STRING="$*"
-bundle exec rake $cmd
+bundle exec rake "$cmd"
