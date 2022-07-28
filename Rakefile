@@ -1,5 +1,7 @@
 require_relative "bulk_merger"
 
+abort('abort: GITHUB_TOKEN not set in environment.') unless ENV['GITHUB_TOKEN']
+
 desc "Confirm that you will release everything you merge"
 task :confirm do
   required_confirmation = "I promise to release everything I merge"
