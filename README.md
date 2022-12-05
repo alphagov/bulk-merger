@@ -69,4 +69,4 @@ Merging PR 'Bump gds-api-adapters from 53.2.0 to 54.0.0' (https://github.com/alp
 
 ## Licence
 
-[MIT License](LICENSE)
+[MIT License](LICENCE)
