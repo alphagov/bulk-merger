@@ -2,9 +2,9 @@ require "octokit"
 
 class BulkMerger
   def self.approve_unreviewed_pull_requests!(list: nil)
-    puts "Searching for PRs containing '#{query_string}'"
+    puts "Searching for PRs containing '#{query_string}' in repositories whose name contains #{repo_string}"
 
-    unreviewed_pull_requests = find_govuk_pull_requests("review:none #{query_string}")
+    unreviewed_pull_requests = find_govuk_pull_requests("review:none #{query_string}","#{repo_string}")
 
     if unreviewed_pull_requests.size == 0
       puts "No unreviewed PRs found!"
@@ -38,7 +38,7 @@ class BulkMerger
   end
 
   def self.merge_approved_pull_requests!
-    unmerged_pull_requests = find_govuk_pull_requests("review:approved #{query_string}")
+    unmerged_pull_requests = find_govuk_pull_requests("review:approved #{query_string}","#{repo_string}")
 
     if unmerged_pull_requests.size == 0
       puts "No unmerged PRs found!"
@@ -74,19 +74,19 @@ class BulkMerger
   end
 
   def self.search_pull_requests(query)
-    client.search_issues("#{query} archived:false is:pr user:alphagov state:open in:title").items
+    client.search_issues("#{query} archived:false is:pr user:ministryofjustice state:open in:title").items
   end
 
-  def self.govuk_repos
-    @govuk_repos ||= client.search_repos("org:alphagov topic:govuk")
+  def self.govuk_repos(repo_string)
+    @govuk_repos ||= client.search_repos("org:ministryofjustice #{repo_string} in:name")
       .items
       .reject!(&:archived)
       .map { |repo| repo.full_name }
   end
 
-  def self.find_govuk_pull_requests(query)
+  def self.find_govuk_pull_requests(query,repo_string)
     search_pull_requests(query).select do |pr|
-      govuk_repos.any? { |repo| pr.repository_url.include?(repo) }
+      govuk_repos(repo_string).any? { |repo| pr.repository_url.include?(repo) }
     end
   end
 
@@ -96,5 +96,9 @@ class BulkMerger
 
   def self.query_string
     ENV.fetch("QUERY_STRING")
+  end
+
+  def self.repo_string
+    ENV.fetch("REPO_STRING")
   end
 end
