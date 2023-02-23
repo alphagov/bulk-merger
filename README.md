@@ -7,7 +7,7 @@ Forked and modified from [alphagov/bulk-merger](https://github.com/alphagov/bulk
 ## Setup
 
 Create a "Personal access token", with at least the `repo/public_repo`
-scope. Add your token with repo access to `.env`:
+scope. Ensure this PAT has SSO authorisation for the `ministryofjustice` organisation. Add your token with repo access to `.env`:
 
 ```
 export GITHUB_TOKEN=<yourtoken>
