@@ -2,35 +2,23 @@ require_relative "bulk_merger"
 
 abort('abort: GITHUB_TOKEN not set in environment.') unless ENV['GITHUB_TOKEN']
 
-desc "Confirm that you will release everything you merge"
-task :confirm do
-  required_confirmation = "I promise to release everything I merge"
-
-  puts <<~CONFIRMATION
-  Bulk merging pull requests should only be done if you're willing to ensure
-  that every application is released to production.
-
-  This is useful for things like security patches, which need to be merged
-  across lots of applications quickly.
-
-  However, in most cases it's more sensible to approve, merge, and release each
-  application individually. This reduces the risk of having unreleased changes
-  on the main branch.
-
-  Please confirm that you understand this, and that you will release all the
-  things you've merged by typing exactly:
-
-  #{required_confirmation}
-
-  CONFIRMATION
-
-  confirmation = STDIN.gets.chomp
-
-  if confirmation == required_confirmation
-    puts "Okay then. You better do.\n"
-  else
-    abort "Please type exactly '#{required_confirmation}' to confirm"
-  end
+desc "Warn user about releasing gems and k8s deployments"
+task :warning do
+  
+  puts <<~WARNING
+  ⚠️ WARNING ⚠️
+  
+  You are about to run a script that will bulk-merge pull requests. Please be aware of the following:
+  
+  Releasing gems is a manual process. Ensure you are familiar with the process before proceeding.
+  Refer to the official documentation for detailed instructions: https://docs.publishing.service.gov.uk/manual/publishing-a-ruby-gem.html
+  
+  Merging pull requests will trigger automatic deployment of the apps in Kubernetes.
+  Make sure you understand the deployment process and how to manage your apps in the Kubernetes environment.
+  For more information, please visit the following link: https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/#how-apps-are-deployed
+  
+  Proceed with caution. If you are unsure about any part of this process, consult with your team or seek help from GOV.UK developers.
+  WARNING
 end
 
 desc "Just approve pull requests"
@@ -39,13 +27,13 @@ task :review do
 end
 
 desc "Approve & merge pull requests"
-task :merge => :confirm do
+task :merge => :warning do
   BulkMerger.approve_unreviewed_pull_requests!
   BulkMerger.merge_approved_pull_requests!
 end
 
 desc "Merge approved pull requests, without reviewing"
-task :merge_only => :confirm do
+task :merge_only => :warning do
   BulkMerger.merge_approved_pull_requests!
 end
 
