@@ -13,7 +13,7 @@ GEM
       net-http
     faraday-retry (2.2.1)
       faraday (~> 2.0)
-    json (2.7.2)
+    json (2.7.6)
     logger (1.6.1)
     multipart-post (2.4.1)
     net-http (0.4.1)
@@ -38,4 +38,4 @@ DEPENDENCIES
   rake
 
 BUNDLED WITH
-   2.5.14
+   2.5.22
